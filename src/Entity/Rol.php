@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RolRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RolRepository::class)]
@@ -15,6 +17,14 @@ class Rol
 
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
+
+    #[ORM\OneToMany(mappedBy: 'rol', targetEntity: Usuario::class)]
+    private Collection $usuarios;
+
+    public function __construct()
+    {
+        $this->usuarios = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -29,6 +39,36 @@ class Rol
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Usuario>
+     */
+    public function getUsuarios(): Collection
+    {
+        return $this->usuarios;
+    }
+
+    public function addUsuario(Usuario $usuario): self
+    {
+        if (!$this->usuarios->contains($usuario)) {
+            $this->usuarios->add($usuario);
+            $usuario->setRol($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuario(Usuario $usuario): self
+    {
+        if ($this->usuarios->removeElement($usuario)) {
+            // set the owning side to null (unless already changed)
+            if ($usuario->getRol() === $this) {
+                $usuario->setRol(null);
+            }
+        }
 
         return $this;
     }

@@ -2,13 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ConcentradoRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\ElementoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ConcentradoRepository::class)]
-class Concentrado
+#[ORM\Entity(repositoryClass: ElementoRepository::class)]
+class Elemento
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -23,14 +21,6 @@ class Concentrado
 
     #[ORM\Column(nullable: true)]
     private ?float $precioAnterior = null;
-
-    #[ORM\ManyToMany(targetEntity: Mina::class, mappedBy: 'fecha')]
-    private Collection $minas;
-
-    public function __construct()
-    {
-        $this->minas = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -69,33 +59,6 @@ class Concentrado
     public function setPrecioAnterior(?float $precioAnterior): self
     {
         $this->precioAnterior = $precioAnterior;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Mina>
-     */
-    public function getMinas(): Collection
-    {
-        return $this->minas;
-    }
-
-    public function addMina(Mina $mina): self
-    {
-        if (!$this->minas->contains($mina)) {
-            $this->minas->add($mina);
-            $mina->addFecha($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMina(Mina $mina): self
-    {
-        if ($this->minas->removeElement($mina)) {
-            $mina->removeFecha($this);
-        }
 
         return $this;
     }

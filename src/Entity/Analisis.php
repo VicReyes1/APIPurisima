@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AnalisisRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnalisisRepository::class)]
@@ -13,112 +14,97 @@ class Analisis
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $ag = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $fechaEnsaye = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $fechaMuestreo = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $pb = null;
+    private ?int $turno = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $zn = null;
+    private ?float $TMS = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $sb = null;
+    #[ORM\ManyToOne(inversedBy: 'analisis')]
+    private ?Planta $planta = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $cu = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?float $ars = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?float $fe = null;
+    #[ORM\ManyToOne(inversedBy: 'analisis')]
+    private ?Usuario $usuario = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAg(): ?float
+    public function getFechaEnsaye(): ?\DateTimeInterface
     {
-        return $this->ag;
+        return $this->fechaEnsaye;
     }
 
-    public function setAg(?float $ag): self
+    public function setFechaEnsaye(\DateTimeInterface $fechaEnsaye): self
     {
-        $this->ag = $ag;
+        $this->fechaEnsaye = $fechaEnsaye;
 
         return $this;
     }
 
-    public function getPb(): ?float
+    public function getFechaMuestreo(): ?\DateTimeInterface
     {
-        return $this->pb;
+        return $this->fechaMuestreo;
     }
 
-    public function setPb(?float $pb): self
+    public function setFechaMuestreo(\DateTimeInterface $fechaMuestreo): self
     {
-        $this->pb = $pb;
+        $this->fechaMuestreo = $fechaMuestreo;
 
         return $this;
     }
 
-    public function getZn(): ?float
+    public function getTurno(): ?int
     {
-        return $this->zn;
+        return $this->turno;
     }
 
-    public function setZn(?float $zn): self
+    public function setTurno(?int $turno): self
     {
-        $this->zn = $zn;
+        $this->turno = $turno;
 
         return $this;
     }
 
-    public function getSb(): ?float
+    public function getTMS(): ?float
     {
-        return $this->sb;
+        return $this->TMS;
     }
 
-    public function setSb(?float $sb): self
+    public function setTMS(?float $TMS): self
     {
-        $this->sb = $sb;
+        $this->TMS = $TMS;
 
         return $this;
     }
 
-    public function getCu(): ?float
+    public function getPlanta(): ?Planta
     {
-        return $this->cu;
+        return $this->planta;
     }
 
-    public function setCu(?float $cu): self
+    public function setPlanta(?Planta $planta): self
     {
-        $this->cu = $cu;
+        $this->planta = $planta;
 
         return $this;
     }
 
-    public function getArs(): ?float
+    public function getUsuario(): ?Usuario
     {
-        return $this->ars;
+        return $this->usuario;
     }
 
-    public function setArs(?float $ars): self
+    public function setUsuario(?Usuario $usuario): self
     {
-        $this->ars = $ars;
-
-        return $this;
-    }
-
-    public function getFe(): ?float
-    {
-        return $this->fe;
-    }
-
-    public function setFe(?float $fe): self
-    {
-        $this->fe = $fe;
+        $this->usuario = $usuario;
 
         return $this;
     }

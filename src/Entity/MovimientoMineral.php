@@ -17,14 +17,15 @@ class MovimientoMineral
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fecha = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $acarrero = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $trituradas = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $humedad = null;
+
+    #[ORM\ManyToOne(inversedBy: 'movimientoMinerales')]
+    private ?Planta $planta = null;
 
     public function getId(): ?int
     {
@@ -43,17 +44,6 @@ class MovimientoMineral
         return $this;
     }
 
-    public function getAcarrero(): ?float
-    {
-        return $this->acarrero;
-    }
-
-    public function setAcarrero(?float $acarrero): self
-    {
-        $this->acarrero = $acarrero;
-
-        return $this;
-    }
 
     public function getTrituradas(): ?float
     {
@@ -75,6 +65,18 @@ class MovimientoMineral
     public function setHumedad(?float $humedad): self
     {
         $this->humedad = $humedad;
+
+        return $this;
+    }
+
+    public function getPlanta(): ?Planta
+    {
+        return $this->planta;
+    }
+
+    public function setPlanta(?Planta $planta): self
+    {
+        $this->planta = $planta;
 
         return $this;
     }
