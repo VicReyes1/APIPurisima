@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Embarque;
+use App\Entity\Elemento;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Embarque>
+ * @extends ServiceEntityRepository<Elemento>
  *
- * @method Embarque|null find($id, $lockMode = null, $lockVersion = null)
- * @method Embarque|null findOneBy(array $criteria, array $orderBy = null)
- * @method Embarque[]    findAll()
- * @method Embarque[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Elemento|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Elemento|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Elemento[]    findAll()
+ * @method Elemento[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EmbarqueRepository extends ServiceEntityRepository
+class ElementoRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Embarque::class);
+        parent::__construct($registry, Elemento::class);
     }
 
-    public function save(Embarque $entity, bool $flush = false): void
+    public function save(Elemento $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class EmbarqueRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Embarque $entity, bool $flush = false): void
+    public function remove(Elemento $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class EmbarqueRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Embarque[] Returns an array of Embarque objects
+//     * @return Elemento[] Returns an array of Elemento objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class EmbarqueRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Embarque
+//    public function findOneBySomeField($value): ?Elemento
 //    {
 //        return $this->createQueryBuilder('e')
 //            ->andWhere('e.exampleField = :val')
