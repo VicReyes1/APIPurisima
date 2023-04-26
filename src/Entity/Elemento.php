@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ElementoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ElementoRepository::class)]
@@ -21,6 +23,14 @@ class Elemento
 
     #[ORM\Column(nullable: true)]
     private ?float $precioAnterior = null;
+
+    #[ORM\ManyToMany(targetEntity: Analisis::class, mappedBy: 'elemento')]
+    private Collection $analisis;
+
+    public function __construct()
+    {
+        $this->analisis = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +69,33 @@ class Elemento
     public function setPrecioAnterior(?float $precioAnterior): self
     {
         $this->precioAnterior = $precioAnterior;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Analisis>
+     */
+    public function getAnalisis(): Collection
+    {
+        return $this->analisis;
+    }
+
+    public function addAnalisi(Analisis $analisi): self
+    {
+        if (!$this->analisis->contains($analisi)) {
+            $this->analisis->add($analisi);
+            $analisi->addElemento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnalisi(Analisis $analisi): self
+    {
+        if ($this->analisis->removeElement($analisi)) {
+            $analisi->removeElemento($this);
+        }
 
         return $this;
     }

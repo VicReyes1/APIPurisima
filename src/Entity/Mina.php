@@ -17,13 +17,19 @@ class Mina
 
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
+      
 
-    #[ORM\ManyToMany(targetEntity: Concentrado::class, inversedBy: 'minas')]
-    private Collection $fecha;
+    #[ORM\OneToMany(mappedBy: 'mina', targetEntity: Submina::class)]
+    private Collection $submina;
+
+    #[ORM\ManyToMany(targetEntity: MovimientoMineral::class, inversedBy: 'minas')]
+    private Collection $movimientoMineral;
 
     public function __construct()
     {
         $this->fecha = new ArrayCollection();
+        $this->submina = new ArrayCollection();
+        $this->movimientoMineral = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -43,26 +49,33 @@ class Mina
         return $this;
     }
 
+    
     /**
-     * @return Collection<int, Concentrado>
+     * @return Collection<int, Submina>
      */
-    public function getFecha(): Collection
+    public function getSubmina(): Collection
     {
-        return $this->fecha;
+        return $this->submina;
     }
 
-    public function addFecha(Concentrado $fecha): self
+    public function addSubmina(Submina $submina): self
     {
-        if (!$this->fecha->contains($fecha)) {
-            $this->fecha->add($fecha);
+        if (!$this->submina->contains($submina)) {
+            $this->submina->add($submina);
+            $submina->setMina($this);
         }
 
         return $this;
     }
 
-    public function removeFecha(Concentrado $fecha): self
+    public function removeSubmina(Submina $submina): self
     {
-        $this->fecha->removeElement($fecha);
+        if ($this->submina->removeElement($submina)) {
+            // set the owning side to null (unless already changed)
+            if ($submina->getMina() === $this) {
+                $submina->setMina(null);
+            }
+        }
 
         return $this;
     }

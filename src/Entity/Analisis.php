@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AnalisisRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,18 @@ class Analisis
 
     #[ORM\ManyToOne(inversedBy: 'analisis')]
     private ?Usuario $usuario = null;
+
+    #[ORM\ManyToMany(targetEntity: Elemento::class, inversedBy: 'analisis')]
+    private Collection $elemento;
+
+    #[ORM\ManyToMany(targetEntity: Concentrado::class, inversedBy: 'analisis')]
+    private Collection $concentrado;
+
+    public function __construct()
+    {
+        $this->elemento = new ArrayCollection();
+        $this->concentrado = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +119,54 @@ class Analisis
     public function setUsuario(?Usuario $usuario): self
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Elemento>
+     */
+    public function getElemento(): Collection
+    {
+        return $this->elemento;
+    }
+
+    public function addElemento(Elemento $elemento): self
+    {
+        if (!$this->elemento->contains($elemento)) {
+            $this->elemento->add($elemento);
+        }
+
+        return $this;
+    }
+
+    public function removeElemento(Elemento $elemento): self
+    {
+        $this->elemento->removeElement($elemento);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Concentrado>
+     */
+    public function getConcentrado(): Collection
+    {
+        return $this->concentrado;
+    }
+
+    public function addConcentrado(Concentrado $concentrado): self
+    {
+        if (!$this->concentrado->contains($concentrado)) {
+            $this->concentrado->add($concentrado);
+        }
+
+        return $this;
+    }
+
+    public function removeConcentrado(Concentrado $concentrado): self
+    {
+        $this->concentrado->removeElement($concentrado);
 
         return $this;
     }

@@ -46,9 +46,13 @@ class Usuario
     #[ORM\OneToMany(mappedBy: 'usuario', targetEntity: Analisis::class)]
     private Collection $analisis;
 
+    #[ORM\OneToMany(mappedBy: 'usuario', targetEntity: MovimientoMineral::class)]
+    private Collection $movimientoMineralR;
+
     public function __construct()
     {
         $this->analisis = new ArrayCollection();
+        $this->movimientoMineralR = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +180,36 @@ class Usuario
             // set the owning side to null (unless already changed)
             if ($analisi->getUsuario() === $this) {
                 $analisi->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MovimientoMineral>
+     */
+    public function getMovimientoMineralR(): Collection
+    {
+        return $this->movimientoMineralR;
+    }
+
+    public function addMovimientoMineralR(MovimientoMineral $movimientoMineralR): self
+    {
+        if (!$this->movimientoMineralR->contains($movimientoMineralR)) {
+            $this->movimientoMineralR->add($movimientoMineralR);
+            $movimientoMineralR->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovimientoMineralR(MovimientoMineral $movimientoMineralR): self
+    {
+        if ($this->movimientoMineralR->removeElement($movimientoMineralR)) {
+            // set the owning side to null (unless already changed)
+            if ($movimientoMineralR->getUsuario() === $this) {
+                $movimientoMineralR->setUsuario(null);
             }
         }
 

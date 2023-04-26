@@ -22,13 +22,15 @@ final class Version20230423051444 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("INSERT INTO rol(nombre) VALUES ('Gerente')");
         $this->addSql("INSERT INTO rol(nombre) VALUES ('Administrador')");
+        $this->addSql("INSERT INTO rol(nombre) VALUES ('Laboratorista')");
+        $this->addSql("INSERT INTO rol(nombre) VALUES ('Operario Bascula')");
 
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("TRUNCATE TABLE rol");
+        
 
     }
 }

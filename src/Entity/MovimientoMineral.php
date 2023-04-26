@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MovimientoMineralRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,6 +28,21 @@ class MovimientoMineral
 
     #[ORM\ManyToOne(inversedBy: 'movimientoMinerales')]
     private ?Planta $planta = null;
+
+    #[ORM\ManyToOne(inversedBy: 'movimientoMineralR')]
+    private ?Usuario $usuario = null;
+
+    #[ORM\ManyToMany(targetEntity: Mina::class, mappedBy: 'movimientoMineral')]
+    private Collection $minas;
+
+    #[ORM\ManyToMany(targetEntity: Submina::class, mappedBy: 'movimientoMineral')]
+    private Collection $subminas;
+
+    public function __construct()
+    {
+        $this->minas = new ArrayCollection();
+        $this->subminas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -80,4 +97,44 @@ class MovimientoMineral
 
         return $this;
     }
+
+    public function getUsuario(): ?Usuario
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?Usuario $usuario): self
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Submina>
+     */
+    public function getSubminas(): Collection
+    {
+        return $this->subminas;
+    }
+
+    public function addSubmina(Submina $submina): self
+    {
+        if (!$this->subminas->contains($submina)) {
+            $this->subminas->add($submina);
+            $submina->addMovimientoMineral($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubmina(Submina $submina): self
+    {
+        if ($this->subminas->removeElement($submina)) {
+            $submina->removeMovimientoMineral($this);
+        }
+
+        return $this;
+    }
+
 }

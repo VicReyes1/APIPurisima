@@ -24,12 +24,17 @@ class Concentrado
     #[ORM\Column(nullable: true)]
     private ?float $precioAnterior = null;
 
-    #[ORM\ManyToMany(targetEntity: Mina::class, mappedBy: 'fecha')]
+
+    #[ORM\ManyToMany(targetEntity: Analisis::class, mappedBy: 'concentrado')]
+    private Collection $analisis;
+
+    #[ORM\ManyToMany(targetEntity: Mina::class, mappedBy: 'concentrado')]
     private Collection $minas;
 
     public function __construct()
     {
         $this->minas = new ArrayCollection();
+        $this->analisis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,6 +78,34 @@ class Concentrado
         return $this;
     }
 
+
+    /**
+     * @return Collection<int, Analisis>
+     */
+    public function getAnalisis(): Collection
+    {
+        return $this->analisis;
+    }
+
+    public function addAnalisi(Analisis $analisi): self
+    {
+        if (!$this->analisis->contains($analisi)) {
+            $this->analisis->add($analisi);
+            $analisi->addConcentrado($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnalisi(Analisis $analisi): self
+    {
+        if ($this->analisis->removeElement($analisi)) {
+            $analisi->removeConcentrado($this);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Mina>
      */
@@ -85,7 +118,7 @@ class Concentrado
     {
         if (!$this->minas->contains($mina)) {
             $this->minas->add($mina);
-            $mina->addFecha($this);
+            $mina->addConcentrado($this);
         }
 
         return $this;
@@ -94,7 +127,7 @@ class Concentrado
     public function removeMina(Mina $mina): self
     {
         if ($this->minas->removeElement($mina)) {
-            $mina->removeFecha($this);
+            $mina->removeConcentrado($this);
         }
 
         return $this;
